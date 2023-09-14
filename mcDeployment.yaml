@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dockermc
+  labels:
+    app: dockermc
+spec:
+  selector:
+    matchLabels:
+      app: dockermc
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: dockermc
+    spec:
+      containers:
+        - name: dockermc
+          image: memcached
+          ports:
+            - name: dockermc-port
+              containerPort: 11211
