@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dockermq
+  labels:
+    app: dockermq
+spec:
+  selector:
+    matchLabels:
+      app: dockermq
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: dockerrmq
+    spec:
+      containers:
+        - name: dockermq
+          image: rabbitmq
+          ports:
+            - name: dockerrmc-port
+              containerPort: 15672
+          env:
+          - name: RABBITMQ_DEFAUTL_PASS
+            valueFrom:
+              secretKeyRef:
+              name: appSecret
+                key: rmq-pass
+          - name: RABBITMQ_DEFAUTL_USER
+            value: "guest"

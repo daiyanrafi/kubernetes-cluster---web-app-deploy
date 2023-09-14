@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: vpromq01
+spec:
+  ports:
+  - port: 15672
+    targetPort: dockerrmc-port
+    protocol : TCP
+  selector:
+    app: dockerrmq
+  type: ClusterIP
+
+  
