@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: docker-app
+  labels:
+        app: docker-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: docker-app
+  template:
+    metadata:
+      labels:
+        app: docker-app
+    spec:
+      containers:
+      - name: docker-app
+        image: daiyanrafi/docker-app:latest
+        ports:
+          - name: docker-app-port
+            containerPort: 8080
+      initContainers:
+        - name: init-mydb
+          image: busybox:latest
+          command: ['sh', 'c', 'untill nslookup dockerdb; do echo waiting mydb; sleep 2; done;']
+        - name: init-mydb
+          image: busybox:latest
+          command: ['sh', 'c', 'untill nslookup vprocache01; do echo waiting mydb; sleep 2; done;']
+
