@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: docker-db
+  labels:
+    app: docker-db
+spec:
+  selector:
+    matchLabels:
+      app: docker-db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: docker-db
+    spec:
+      containers:
+      - name: docker-db
+        image: daiyanrafi/docker-db:latest
+        volumeMounts:
+          - mountPath: /var/lib/mysql
+            name: docker-db-data
+        ports:
+          - name: docker-db-port
+            containerPort: 3306
+        env:
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+              name: appSecret
+                key: db-pass
+      nodeSelector:
+        zone: us-north-3a
+      volumes:
+        - name: docker-db-data
+          awsElasticBlockStore:
+            volumeID: vol-09ejehnfdke76e8d
+            fsType: ext4
+      
+      initContainers:
+        - name: busybox
+          image: busybox:latest
+          args: ["rm", "-rf", "/var/lib/mysql/lost+found"]
+          volumeMounts:
+            - name: docker-db-data
+              mountPath: /var/lib/mysql
+
+
+
+
+
+
+
